@@ -24,9 +24,15 @@ baseline_data = {
     "label": "Baseline Minizinc model"
 }
 
+truncated_baseline_data = {
+    "N" : baseline_data["N"][:16],
+    "T (ms)" : baseline_data["T (ms)"][:16],
+    "label": baseline_data["label"]
+}
+
 # Graph variables
-IS_LOG_SCALE = False
-MODELS_TO_PLOT = [baseline_data, qubo_data]
+IS_LOG_SCALE = True
+MODELS_TO_PLOT = [truncated_baseline_data, minizinc_data]
 
 # Plotting graph
 plt.figure(0)
