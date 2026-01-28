@@ -418,13 +418,13 @@ the complexity of the constraints would not get better but would get worse since
 
 \section{Conclusion}
 In this report, we have introduced 2 boolean variable models to solve the $N$-queens problem : a MiniZinc model and a QUBO model. We used an integer variable MiniZinc model as a baseline model to compare execution time.
-Concerning the MiniZinc models, 
+Concerning the MiniZinc models, we can see the importance of a well defined model considering that one can compute solutions up to $N=400$ whereas the other one struggles at $N\geq 25$. From these 2 models, we can also see the importance
+of how the number of variables and constraints can hinder a model meant to solve a constraint optimization problem. The baseline model shows that defining the variables such that we simplify the constraints and even imply some 
+just by the definition of the variables can greatly improve the performance of a model.
+As for the QUBO model, we can see that QUBO is way more efficient that the boolean varaible model in MiniZinc, as it is able to go up to $N=90$ at least. But it also shows the weakness of QUBO as even though it is faster for such computation, 
+we do not have the same freedom in defining our variables and thus simplifying our model for better efficiency. As such, the integer variable MiniZinc model still outperforms our QUBO model.
 
 \section{Sources}
-\begin{itemize}
-    \item Source code : 
-\end{itemize}
-
-
+You can find the source code used for this report in the following \href{https://github.com/Gillan0/n_queens_optimization}{GitHub repository}.
 
 \end{document}
