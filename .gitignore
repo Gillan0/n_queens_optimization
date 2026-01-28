@@ -1,0 +1,8 @@
+docs/main.a*
+docs/main.f*
+docs/main.l*
+docs/main.s*
+docs/main.o*
+docs/main.toc
+
+src/qubo/.venv
