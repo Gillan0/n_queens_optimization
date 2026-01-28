@@ -42,7 +42,7 @@
 \section{Introduction}
 \noindent
 The N-queens problem is a famous optimization problem. Let $N\in\mathbb{N}$. We consider a chess board of size $N \times N$. We want to 
-place $N$ queen pieces on the board such that they can not attack one another. In chess, a queen can attack pieces who are on the same row,
+place $N$ queen pieces on the board such that they cannot attack one another. In chess, a queen can attack pieces which are on the same row,
 column or diagonal as itself.
 \begin{wrapfigure}{r}{0.3\textwidth}
     \centering
@@ -76,7 +76,7 @@ x_{i,j} =
 
 \noindent Now that we have our board, we can use the rules of chess to define our constraints.
 Queens can attack pieces on the same row and  on the same column, meaning that we can only have 1 queen per row and one queen per column.
-As such, we have the follwing constraints : 
+As such, we have the following constraints : 
 \begin{align*}
     &\forall i \in \llbracket 1, N \rrbracket \quad \sum_{j=1}^{N} x_{i,j} = 1, \quad \text{(column constraints)} \\
     &\forall j \in \llbracket 1, N \rrbracket \quad \sum_{i=1}^{N} x_{i,j} = 1,  \quad \text{(row constraints)}
@@ -134,13 +134,13 @@ output [show2d(positions)];
 To properly evaluate our program, we remove the command which prints the solution. By performing subsequent execution, we have the following execution times : 
 \begin{center}
     \includegraphics[width=0.5\textwidth]{ressources/minizinc_data.png}
-    \captionof{figure}{Execution time of the boolean variable minizinc model for different values of $N$}
+    \captionof{figure}{Execution time of the boolean variable MiniZinc model for different values of $N$}
 \end{center}
 
 We could have expected, an exponential growth of the execution times as $N$ grows larger. Although, it is not obvious in this graph,
 the execution time for $N=26$ takes way longer than the one for $N=25$ (more than 10s). 
-It can also be interesting to note that the times for $N=1, 5 and 10$ are similar (approx. 300ms). 
-We expect from a well defined model and a good solver that the case $N=1$ be over as fast as possible. 
+It can also be interesting to note that the times for $N=1, 5 and 10$ are similar (approximately 300ms). 
+We expect from a well defined model and a good solver that the case $N=1$ be done as fast as possible. 
 In the case $N=1$, compile time is almost all of the execution time. The compilation reduces the program down to :
 \begin{quote}
     \begin{verbatim}    
@@ -169,7 +169,7 @@ translate to adding
     &- \sum_{i=1}^{N} \left( \sum_{j=1}^{N} x_{i,j} + 2 \sum_{k < l}^{N} x_{i,k} x_{i,l} \right) \text{and}
     - \sum_{j=1}^{N} \left( \sum_{i=1}^{N} x_{i,j} + 2 \sum_{k < l}^{N} x_{k,j} x_{l,j} \right),
 \end{align*}
-to the loss function. The diagaonal constraints
+to the loss function. The diagonal constraints
 \begin{align*}
     &\forall d \in \llbracket 0, N-1 \rrbracket \quad 
     \sum_{k=0}^{N-d-1} x_{1+k, 1+k+d} \leq 1, \quad \forall d \in \llbracket 1, N-1 \rrbracket \quad 
@@ -235,7 +235,7 @@ X_{\varphi \left(i, j\right)} = x_{i,j}.
 
 \subsection{Implementation}
 \noindent We will now use the Fixstars Amplify API and Python to solve the N-queens problem with the above QUBO model. 
-Thankfully, the Fixstars Amplify API auto generates the penalty function from the constraints we have defined earlier.
+Thankfully, the Fixstars Amplify API auto-generates the penalty function from the constraints we have defined earlier.
 As such, we do not need to properly define the matrix $Q$.  
 
 \noindent Here is our Python code :
@@ -327,25 +327,25 @@ By querying multiple requests to the server for different values of $N$, we get 
 \end{center}
 We can also observe an exponential growth as $N$ grows larger.
 Here, it is not computational power which does not allow us to look at cases where $N \geq 91$, but it 
-is the amount of variable which blocks us. Indeed, Fixstars API is a service with different subscription tiers.
+is the amount of variables which blocks us. Indeed, Fixstars API is a service with different subscription tiers.
 For $N > 90$, the number of variables exceeds the maximum job size of 8192. 
-Performance wise, our model is similar to the 1-queen problem for $N \leq 40$. 
+Performance-wise, our model is similar to the 1-queen problem for $N \leq 40$. 
 These values are also quite low, being expressed in microseconds unlike the previous model.
 
-\section{Comparing different model}
+\section{Comparing different models}
 
 \subsection{Reminder - Baseline model}
 Unlike our previous model, here we consider $N$ different integer variables of value ranging from 1 to $N$. 
 Let us consider for $i \in \llbracket 1, N \rrbracket$, $Q_i \in \llbracket 1, N \rrbracket$ be the row the queen in column $k$ is placed.
 This problem formulation already fits the row constraint we developed previously. To translate the column constraint, 
-here all variable must be different from one another, or 
+here all variables must be different from one another, or 
 \begin{align*}
     \forall i \in \llbracket 1, N \rrbracket \quad \forall j \in \llbracket 1, N \rrbracket \quad i \neq j \implies Q_i \neq Q_j. \\
 \end{align*}
 As for the diagonal constraints, they become : 
 \begin{align*}
     \forall i \in \llbracket 1, N \rrbracket \quad \forall j \in \llbracket 1, N \rrbracket \quad i \neq j \implies Q_i + i \neq Q_j + j \\
-    \forall i \in \llbracket 1, N \rrbracket \quad \forall j \in \llbracket 1, N \rrbracket \quad i \neq j \implies Q_i - j \neq Q_j - j \\
+    \forall i \in \llbracket 1, N \rrbracket \quad \forall j \in \llbracket 1, N \rrbracket \quad i \neq j \implies Q_i - i \neq Q_j - j \\
 \end{align*}
 \subsection{Implementation of the baseline model}
 The lecture slide uses this \href{https://docs.minizinc.dev/en/2.5.5/downloads/nqueens.mzn}{MiniZinc example}, 
@@ -368,13 +368,13 @@ output [ if fix(q[j]) == i then "Q" else "." endif ++
          if j == n then "\n" else "" endif | i,j in 1..n]        
 \end{verbatim}
 \end{quote}
-With a few iteration of this implementation, we get the following execution times : 
+With a few iterations of this implementation, we get the following execution times : 
 \begin{center}
     \includegraphics[width=0.5\textwidth]{ressources/baseline_data.png}
     \captionof{figure}{Execution time of the baseline model for different values of $N$}
 \end{center}
 We can observe the same overall figure of an exponential increase as $N$ gets larger. 
-However, here, for $N \leq 100$, we can observe fluctuations. Certains cases are more complex than others.
+However, here, for $N \leq 100$, we can observe fluctuations. Certain cases are more complex than others.
 This can be attributed to the solver not taking the best path first and thus being longer for some cases more than others.
 This model can go up to $N=400$ with only 1.4s of execution time.
 
@@ -390,14 +390,14 @@ Since all models follow an exponential growth, we will use log scale to compare 
 
 The boolean variable MiniZinc model performs way worse than the integer variable MiniZinc model. 
 Indeed, it is hard to have results for $N \geq 25$ for the boolean variable model due to the long execution times
-whereas the interger variable model computes for up to $N=400$.
+whereas the integer variable model computes for up to $N=400$.
 
-Difference between both models lie in the choice of variables. The choice to use integer variables already implements the row 
+Differences between both models lie in the choice of variables. The choice to use integer variables already implements the row 
 constraint. The column constraint becomes a simple difference check between all variables instead of computing a heavy sum of $\mathcal{O}\left(N\right)$
-for each variables and thus a total cost of $\mathcal{O}\left(N^2\right)$. Furthermore instead of using $N^2$ varaiables, we only need to use $N$ varaiables.
+for each variable and thus a total cost of $\mathcal{O}\left(N^2\right)$. Furthermore instead of using $N^2$ variables, we only need to use $N$ variables.
 
-This comparaison shows the importance of well defining one's model for optimization problems by trying to 
-imply as much constraints as possible in the definition of the variables.
+This comparison shows the importance of well defining one's model for optimization problems by trying to 
+imply as many constraints as possible in the definition of the variables.
 
 \subsection{Comparing the QUBO model with the integer variable MiniZinc model}
 
@@ -410,10 +410,10 @@ As for the QUBO model, although we cannot have values for the greater values of 
 the limitations of the Fixstars API, we can already observe that the values for $N=90$ are similar to those for $N=300$ of the MiniZinc baseline model.
 
 An interesting aspect of the QUBO model though, is that for the cases where $N$ is small, it outperforms the MiniZinc model.
-This is probably because the servers owned by Fixstars are tuned to perform these kind of computations instead of running the MiniZinc models on one's own computer.
+This is probably because the servers owned by Fixstars are tuned to perform this kind of computation instead of running the MiniZinc models on one's own computer.
 
 By applying what we saw from the analysis of the MiniZinc models, one might wonder if adapting the integer variable model to QUBO might improve performance, perhaps by using Unary encoding 
-of the integer variables. Although it would decrease the number of variables by a small margin with $N$ integer variables encoded each by $N-1$ boolean varaiables thus $N\left(N-1\right)$ boolean variables in total, 
+of the integer variables. Although it would decrease the number of variables by a small margin with $N$ integer variables encoded each by $N-1$ boolean variables thus $N\left(N-1\right)$ boolean variables in total, 
 the complexity of the constraints would not get better but would get worse since we also have to add constraints to keep the encoding of the integer variables.
 
 \section{Conclusion}
@@ -421,7 +421,7 @@ In this report, we have introduced 2 boolean variable models to solve the $N$-qu
 Concerning the MiniZinc models, we can see the importance of a well defined model considering that one can compute solutions up to $N=400$ whereas the other one struggles at $N\geq 25$. From these 2 models, we can also see the importance
 of how the number of variables and constraints can hinder a model meant to solve a constraint optimization problem. The baseline model shows that defining the variables such that we simplify the constraints and even imply some 
 just by the definition of the variables can greatly improve the performance of a model.
-As for the QUBO model, we can see that QUBO is way more efficient that the boolean varaible model in MiniZinc, as it is able to go up to $N=90$ at least. But it also shows the weakness of QUBO as even though it is faster for such computation, 
+As for the QUBO model, we can see that QUBO is way more efficient than the boolean variable model in MiniZinc, as it is able to go up to $N=90$ at least. But it also shows the weakness of QUBO as even though it is faster for such computation, 
 we do not have the same freedom in defining our variables and thus simplifying our model for better efficiency. As such, the integer variable MiniZinc model still outperforms our QUBO model.
 
 \section{Sources}

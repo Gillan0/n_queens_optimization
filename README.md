@@ -8,17 +8,17 @@ in Artificial Intelligence" course hosted at the University of Tokyo.
 ```
 ├── README.md
 ├── docs # Report related files
-│   ├── main.pdf # Pdf rendition of the LaTeX file
+│   ├── main.pdf # PDF rendition of the LaTeX file
 │   ├── main.tex # Original LaTeX file
 │   └── ressources # Images used in the report
 └── src # Source code
     ├── graph.py # Draw the different graphs of the report.
     ├── minizinc
-    │   ├── baseline_mode.mzn # Baseline Minizinc model
+    │   ├── baseline_mode.mzn # Baseline MiniZinc model
     │   └── main.mzn # Boolean variable of the MiniZinc model
     └── qubo
-        ├── main.py # QUBO model using fixstars
-        ├── .env # Holds the API token to access the fixstars API
+        ├── main.py # QUBO model using Fixstars
+        ├── .env # Holds the API token to access the Fixstars API
         └── requirements.txt # Dependencies of QUBO model
 ``` 
 
@@ -26,7 +26,7 @@ in Artificial Intelligence" course hosted at the University of Tokyo.
 ### MiniZinc
 Copy and paste the content of the model you want into a MiniZinc editor and execute it.
 ### QUBO 
-In order to run the QUBO program, one first needs a Fixstars account in order to get a token to use their API.
+In order to run the QUBO program, one needs a Fixstars account in order to get a token to use their API.
 Firstly, change the token in ```src/qubo/.env```.
 ```
 FIXSTARS_TOKEN = "..." # Insert your own Fixstars token
@@ -36,7 +36,7 @@ Then move to the correct directory and create a python virtual environment.
 cd src/qubo
 python3 -m venv .venv
 ```
-Swithc to the virtual environment 
+Switch to the virtual environment 
 ```
 source .venv/bin/activate
 ```
